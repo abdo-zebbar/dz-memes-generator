@@ -39,9 +39,8 @@ export default function EditorPage() {
   const drawCanvasRef = useRef<() => void>()
   const [imageElement, setImageElement] = useState<HTMLImageElement | null>(null)
 
-  // Canvas dimensions
-  const CANVAS_WIDTH = 800
-  const CANVAS_HEIGHT = 600
+  // Dynamic canvas dimensions based on image aspect ratio
+  const [canvasDimensions, setCanvasDimensions] = useState({ width: 800, height: 600 })
 
   // Stable canvas rendering with image caching
   const drawCanvas = useCallback(() => {
@@ -52,13 +51,13 @@ export default function EditorPage() {
     if (!ctx) return
 
     // Clear canvas
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+    ctx.clearRect(0, 0, canvasDimensions.width, canvasDimensions.height)
 
     // Draw checkered background (like Photoshop workspace) if no image
     if (!imageSrc) {
       const squareSize = 20
-      for (let y = 0; y < CANVAS_HEIGHT; y += squareSize) {
-        for (let x = 0; x < CANVAS_WIDTH; x += squareSize) {
+      for (let y = 0; y < canvasDimensions.height; y += squareSize) {
+        for (let x = 0; x < canvasDimensions.width; x += squareSize) {
           const isDark = (x / squareSize + y / squareSize) % 2 === 0
           ctx.fillStyle = isDark ? '#f1f5f9' : '#e2e8f0' // Light slate checkered pattern
           ctx.fillRect(x, y, squareSize, squareSize)
@@ -69,27 +68,32 @@ export default function EditorPage() {
       ctx.fillStyle = '#64748b'
       ctx.font = 'bold 24px Arial'
       ctx.textAlign = 'center'
-      ctx.fillText('Upload an image to start creating', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20)
+      ctx.fillText('Upload an image to start creating', canvasDimensions.width / 2, canvasDimensions.height / 2 - 20)
       ctx.font = '16px Arial'
-      ctx.fillText('Your meme will appear here', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 20)
+      ctx.fillText('Your meme will appear here', canvasDimensions.width / 2, canvasDimensions.height / 2 + 20)
     } else {
       // Draw background image
       if (imageElement) {
         const img = imageElement
 
-        // Calculate aspect ratio and dimensions
-        const aspectRatio = img.naturalWidth / img.naturalHeight
-        let drawWidth = CANVAS_WIDTH
-        let drawHeight = CANVAS_WIDTH / aspectRatio
+        // Image should fill the entire canvas while maintaining aspect ratio
+        const canvasAspectRatio = canvasDimensions.width / canvasDimensions.height
+        const imageAspectRatio = img.naturalWidth / img.naturalHeight
 
-        if (drawHeight > CANVAS_HEIGHT) {
-          drawHeight = CANVAS_HEIGHT
-          drawWidth = CANVAS_HEIGHT * aspectRatio
+        let drawWidth = canvasDimensions.width
+        let drawHeight = canvasDimensions.height
+        let x = 0
+        let y = 0
+
+        if (imageAspectRatio > canvasAspectRatio) {
+          // Image is wider than canvas aspect ratio - fit by height
+          drawWidth = canvasDimensions.height * imageAspectRatio
+          x = (canvasDimensions.width - drawWidth) / 2
+        } else {
+          // Image is taller than canvas aspect ratio - fit by width
+          drawHeight = canvasDimensions.width / imageAspectRatio
+          y = (canvasDimensions.height - drawHeight) / 2
         }
-
-        // Center the image
-        const x = (CANVAS_WIDTH - drawWidth) / 2
-        const y = (CANVAS_HEIGHT - drawHeight) / 2
 
         ctx.drawImage(img, x, y, drawWidth, drawHeight)
       }
@@ -110,7 +114,7 @@ export default function EditorPage() {
         const testLine = currentLine + (currentLine ? ' ' : '') + word
         const metrics = ctx.measureText(testLine)
 
-        if (metrics.width > CANVAS_WIDTH - 40 && currentLine) {
+        if (metrics.width > canvasDimensions.width - 40 && currentLine) {
           lines.push(currentLine)
           currentLine = word
         } else {
@@ -138,21 +142,49 @@ export default function EditorPage() {
         y += lineHeight
       }
 
-      // Draw selection bounding box for active layer
+      // Draw enhanced selection bounding box for active layer
       if (layer.id === activeLayerId) {
+        const bounds = {
+          left: layer.x - 100,
+          top: layer.y - 30,
+          right: layer.x + 100,
+          bottom: layer.y + 30,
+          width: 200,
+          height: 60
+        }
+
+        // Draw semi-transparent background highlight
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.1)'
+        ctx.fillRect(bounds.left, bounds.top, bounds.width, bounds.height)
+
+        // Draw main border
         ctx.strokeStyle = '#10b981'
         ctx.lineWidth = 2
-        ctx.setLineDash([5, 5])
-        ctx.strokeRect(
-          layer.x - 100,
-          layer.y - 30,
-          200,
-          60
-        )
+        ctx.setLineDash([8, 4])
+        ctx.strokeRect(bounds.left, bounds.top, bounds.width, bounds.height)
         ctx.setLineDash([])
+
+        // Draw corner handles
+        const handleSize = 6
+        ctx.fillStyle = '#10b981'
+        ctx.strokeStyle = '#ffffff'
+        ctx.lineWidth = 1
+
+        // Corner positions
+        const corners = [
+          { x: bounds.left, y: bounds.top }, // top-left
+          { x: bounds.right, y: bounds.top }, // top-right
+          { x: bounds.left, y: bounds.bottom }, // bottom-left
+          { x: bounds.right, y: bounds.bottom } // bottom-right
+        ]
+
+        corners.forEach(corner => {
+          ctx.fillRect(corner.x - handleSize/2, corner.y - handleSize/2, handleSize, handleSize)
+          ctx.strokeRect(corner.x - handleSize/2, corner.y - handleSize/2, handleSize, handleSize)
+        })
       }
     })
-  }, [imageSrc, imageElement, layers, activeLayerId])
+  }, [imageSrc, imageElement, layers, activeLayerId, canvasDimensions])
 
   // Update the ref whenever drawCanvas changes
   useEffect(() => {
@@ -202,11 +234,6 @@ export default function EditorPage() {
         }
       }
 
-      // Delete layer with Delete or Backspace key
-      if ((e.key === 'Delete' || e.key === 'Backspace') && activeLayerId) {
-        e.preventDefault()
-        deleteLayer()
-      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -223,8 +250,8 @@ export default function EditorPage() {
     if (!canvasRef.current) return
 
     const canvas = canvasRef.current
-    canvas.width = CANVAS_WIDTH
-    canvas.height = CANVAS_HEIGHT
+    canvas.width = canvasDimensions.width
+    canvas.height = canvasDimensions.height
 
     // Load image when imageSrc changes
     if (imageSrc) {
@@ -232,16 +259,51 @@ export default function EditorPage() {
       img.crossOrigin = 'anonymous'
       img.onload = () => {
         setImageElement(img)
+
+        // Calculate new canvas dimensions based on image aspect ratio
+        const aspectRatio = img.naturalWidth / img.naturalHeight
+        let newWidth = 800
+        let newHeight = 600
+
+        // Fit image within max dimensions while maintaining aspect ratio
+        const maxWidth = 1200
+        const maxHeight = 800
+
+        if (aspectRatio > 1) {
+          // Landscape image
+          newWidth = Math.min(maxWidth, img.naturalWidth)
+          newHeight = newWidth / aspectRatio
+          if (newHeight > maxHeight) {
+            newHeight = maxHeight
+            newWidth = newHeight * aspectRatio
+          }
+        } else {
+          // Portrait image
+          newHeight = Math.min(maxHeight, img.naturalHeight)
+          newWidth = newHeight * aspectRatio
+          if (newWidth > maxWidth) {
+            newWidth = maxWidth
+            newHeight = newWidth / aspectRatio
+          }
+        }
+
+        // Ensure minimum dimensions
+        newWidth = Math.max(400, Math.round(newWidth))
+        newHeight = Math.max(300, Math.round(newHeight))
+
+        setCanvasDimensions({ width: newWidth, height: newHeight })
+
         // Use the ref to call the latest drawCanvas function after image loads
         setTimeout(() => drawCanvasRef.current?.(), 10)
       }
       img.src = imageSrc
     } else {
       setImageElement(null)
+      setCanvasDimensions({ width: 800, height: 600 }) // Reset to default
       // Use the ref to call the latest drawCanvas function
       drawCanvasRef.current?.()
     }
-  }, [imageSrc])
+  }, [imageSrc, canvasDimensions])
 
   // Effect for layer and image changes
   useEffect(() => {
@@ -331,8 +393,8 @@ export default function EditorPage() {
     const newLayer: TextLayer = {
       id: `layer-${Date.now()}`,
       content: 'New Text',
-      x: CANVAS_WIDTH / 2,
-      y: CANVAS_HEIGHT / 2 + (layers.length * 60),
+      x: canvasDimensions.width / 2,
+      y: canvasDimensions.height / 2 + (layers.length * 60),
       fontSize: 48,
       fill: '#FFFFFF',
       stroke: '#000000',
@@ -370,6 +432,32 @@ export default function EditorPage() {
       setLayers(prev => prev.filter(layer => layer.id !== activeLayerId))
       setActiveLayerId(null)
     }
+  }
+
+  // Delete specific layer
+  const deleteSpecificLayer = (layerId: string) => {
+    if (window.confirm('Are you sure you want to delete this layer?')) {
+      setLayers(prev => prev.filter(layer => layer.id !== layerId))
+      if (activeLayerId === layerId) {
+        setActiveLayerId(null)
+      }
+    }
+  }
+
+  // Duplicate specific layer
+  const duplicateSpecificLayer = (layerId: string) => {
+    const layerToDuplicate = layers.find(layer => layer.id === layerId)
+    if (!layerToDuplicate) return
+
+    const newLayer: TextLayer = {
+      ...layerToDuplicate,
+      id: `layer-${Date.now()}`,
+      x: layerToDuplicate.x + 20,
+      y: layerToDuplicate.y + 20
+    }
+
+    setLayers(prev => [...prev, newLayer])
+    setActiveLayerId(newLayer.id)
   }
 
   // Update active layer
@@ -540,8 +628,8 @@ export default function EditorPage() {
 
         // Ensure canvas has proper dimensions
         if (canvas.width === 0 || canvas.height === 0) {
-          canvas.width = CANVAS_WIDTH
-          canvas.height = CANVAS_HEIGHT
+          canvas.width = canvasDimensions.width
+          canvas.height = canvasDimensions.height
           drawCanvasRef.current?.() // Redraw with proper dimensions
         }
 
@@ -627,9 +715,9 @@ export default function EditorPage() {
           .from('memes')
           .getPublicUrl(fileName)
 
-        // Insert into posts table
+        // Insert into memes table
         const { error: insertError } = await supabase
-          .from('posts')
+          .from('memes')
           .insert({
             title: layers.length > 0 ? layers[0].content : 'Untitled Meme',
             image_url: publicUrl,
@@ -852,16 +940,68 @@ export default function EditorPage() {
                 />
               </div>
 
-              {/* Layer Info */}
-              <div className="text-sm text-slate-600 dark:text-slate-400 border-t border-slate-200/60 dark:border-slate-700/60 pt-6 space-y-2">
-                <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3">
-                  <div className="font-medium">Active Layer:</div>
-                  <div className="text-slate-500 dark:text-slate-400 mt-1">
-                    {activeLayerId ? layers.find(l => l.id === activeLayerId)?.content?.substring(0, 25) + '...' : 'None selected'}
-                  </div>
-                </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
-                  <div className="font-medium text-blue-700 dark:text-blue-300">Total Layers: {layers.length}</div>
+              {/* Layer Management */}
+              <div className="border-t border-slate-200/60 dark:border-slate-700/60 pt-6">
+                <h4 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                  <Palette className="h-5 w-5 text-purple-600" />
+                  Layers ({layers.length})
+                </h4>
+
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {layers.length === 0 ? (
+                    <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+                      <Type className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No text layers yet</p>
+                      <p className="text-xs">Click "Add Text" to get started</p>
+                    </div>
+                  ) : (
+                    layers.map((layer) => (
+                      <div
+                        key={layer.id}
+                        className={`group flex items-center justify-between p-3 rounded-lg border transition-all duration-200 cursor-pointer ${
+                          activeLayerId === layer.id
+                            ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700 shadow-sm'
+                            : 'bg-slate-50 dark:bg-slate-700/50 border-slate-200/50 dark:border-slate-600/50 hover:bg-slate-100 dark:hover:bg-slate-700/70'
+                        }`}
+                        onClick={() => setActiveLayerId(layer.id)}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Type className="h-4 w-4 text-slate-500 dark:text-slate-400 flex-shrink-0" />
+                            <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">
+                              {layer.content || 'Empty Text'}
+                            </span>
+                          </div>
+                          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            Font: {layer.fontSize}px • Color: {layer.fill}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              duplicateSpecificLayer(layer.id)
+                            }}
+                            className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors duration-150"
+                            title="Duplicate Layer"
+                          >
+                            <Copy className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              deleteSpecificLayer(layer.id)
+                            }}
+                            className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors duration-150"
+                            title="Delete Layer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

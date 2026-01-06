@@ -1,46 +1,54 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Mail, CheckCircle, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { supabase } from '@/lib/supabaseClient'
 
-type AuthStep = 'email' | 'otp' | 'success'
+type AuthStep = 'email' | 'success'
 
 export default function AuthPage() {
+  const router = useRouter()
   const [step, setStep] = useState<AuthStep>('email')
   const [email, setEmail] = useState('')
-  const [otp, setOtp] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
-    // Simulate API call to send OTP
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      // Send OTP to the user's email (since email confirmation is disabled, this will automatically sign them in)
+      const { data, error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: true, // Create user if they don't exist
+        }
+      })
 
-    setIsLoading(false)
-    setStep('otp')
+      if (error) {
+        throw error
+      }
+
+      // Show success message and redirect
+      setStep('success')
+      setTimeout(() => {
+        router.push('/editor')
+      }, 2000)
+
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during authentication')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const handleOtpSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    // Simulate API call to verify OTP
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    setIsLoading(false)
-    setStep('success')
-  }
-
-  const handleBack = () => {
-    setStep('email')
-    setOtp('')
-  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -63,7 +71,7 @@ export default function AuthPage() {
                 <CardHeader className="text-center">
                   <CardTitle className="text-2xl">Welcome to dz memes</CardTitle>
                   <CardDescription>
-                    Enter your email to get started
+                    Enter your email to sign in or create an account
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -85,12 +93,18 @@ export default function AuthPage() {
                         />
                       </div>
                     </div>
+                    {error && (
+                      <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-md">
+                        <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
+                        <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                      </div>
+                    )}
                     <Button
                       type="submit"
                       className="w-full"
                       disabled={isLoading || !email}
                     >
-                      {isLoading ? 'Sending...' : 'Send OTP'}
+                      {isLoading ? 'Sending magic link...' : 'Send Magic Link'}
                     </Button>
                   </form>
                 </CardContent>
@@ -98,66 +112,6 @@ export default function AuthPage() {
             </motion.div>
           )}
 
-          {step === 'otp' && (
-            <motion.div
-              key="otp"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Card>
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl">Check your email</CardTitle>
-                  <CardDescription>
-                    We've sent a 6-digit code to {email}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleOtpSubmit} className="space-y-4">
-                    <div>
-                      <label htmlFor="otp" className="block text-sm font-medium text-foreground mb-2">
-                        Enter verification code
-                      </label>
-                      <Input
-                        id="otp"
-                        type="text"
-                        placeholder="000000"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                        className="text-center text-2xl tracking-widest"
-                        maxLength={6}
-                        required
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleBack}
-                        className="flex-1"
-                      >
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back
-                      </Button>
-                      <Button
-                        type="submit"
-                        className="flex-1"
-                        disabled={isLoading || otp.length !== 6}
-                      >
-                        {isLoading ? 'Verifying...' : 'Verify'}
-                      </Button>
-                    </div>
-                  </form>
-                  <div className="mt-4 text-center">
-                    <Button variant="link" className="text-sm">
-                      Didn't receive the code? Resend
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
 
           {step === 'success' && (
             <motion.div
@@ -177,14 +131,11 @@ export default function AuthPage() {
                     <CheckCircle className="mx-auto h-16 w-16 text-primary mb-4" />
                   </motion.div>
                   <h2 className="text-2xl font-bold text-foreground mb-2">
-                    Welcome aboard!
+                    Welcome!
                   </h2>
                   <p className="text-muted-foreground mb-6">
-                    Your account has been created successfully. Let's start creating memes!
+                    Redirecting you now...
                   </p>
-                  <Button className="w-full">
-                    Start Creating
-                  </Button>
                 </CardContent>
               </Card>
             </motion.div>

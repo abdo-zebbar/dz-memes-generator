@@ -8,6 +8,7 @@ import { TextControls } from './TextControls';
 import { ImageControls } from './ImageControls';
 import { DownloadButton } from './DownloadButton';
 import { supabase } from '../lib/supabaseClient';
+import { useToast } from './ui/Toast';
 import './MemeGenerator.css';
 
 const DEFAULT_CANVAS_WIDTH = 800;
@@ -15,6 +16,7 @@ const DEFAULT_CANVAS_HEIGHT = 600;
 
 export const MemeGenerator: React.FC = () => {
   const { theme, toggleTheme, language, setLanguage, t } = useTheme();
+  const { showToast } = useToast();
   const [imageState, setImageState] = useState<ImageState>({
     url: null,
     width: DEFAULT_CANVAS_WIDTH,
@@ -133,14 +135,14 @@ export const MemeGenerator: React.FC = () => {
 
   const handleUpload = async () => {
     if (!canvasRef.current || !memeTitle.trim()) {
-      alert('Please add a title to your meme');
+      showToast('Please add a title to your meme', 'error');
       return;
     }
 
     // Check if user is authenticated
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      alert('Please sign in to upload memes');
+      showToast('Please sign in to upload memes', 'error');
       return;
     }
 
@@ -151,7 +153,7 @@ export const MemeGenerator: React.FC = () => {
       const canvas = canvasRef.current;
       canvas.toBlob(async (blob) => {
         if (!blob) {
-          alert('Failed to create meme image');
+          showToast('Failed to create meme image', 'error');
           setIsUploading(false);
           return;
         }
@@ -169,7 +171,7 @@ export const MemeGenerator: React.FC = () => {
 
         if (uploadError) {
           console.error('Upload error:', uploadError);
-          alert('Failed to upload meme');
+          showToast('Failed to upload meme', 'error');
           setIsUploading(false);
           return;
         }
@@ -179,9 +181,9 @@ export const MemeGenerator: React.FC = () => {
           .from('memes')
           .getPublicUrl(fileName);
 
-        // Insert into posts table
+        // Insert into memes table
         const { error: insertError } = await supabase
-          .from('posts')
+          .from('memes')
           .insert({
             title: memeTitle.trim(),
             image_url: publicUrl,
@@ -192,7 +194,7 @@ export const MemeGenerator: React.FC = () => {
 
         if (insertError) {
           console.error('Insert error:', insertError);
-          alert('Failed to save meme to database');
+          showToast('Failed to save meme to database', 'error');
         } else {
           setUploadSuccess(true);
           setTimeout(() => setUploadSuccess(false), 2000);
@@ -213,7 +215,7 @@ export const MemeGenerator: React.FC = () => {
       });
     } catch (error) {
       console.error('Upload error:', error);
-      alert('An error occurred while uploading');
+      showToast('An error occurred while uploading', 'error');
       setIsUploading(false);
     }
   };

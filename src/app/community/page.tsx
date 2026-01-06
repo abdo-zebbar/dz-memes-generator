@@ -69,7 +69,7 @@ export default function CommunityPage() {
   const fetchMemes = async () => {
     try {
       const { data, error } = await supabase
-        .from('posts')
+        .from('memes')
         .select(`
           *,
           profiles (
@@ -289,7 +289,7 @@ export default function CommunityPage() {
               {/* Meme Image */}
               <div className="mb-6">
                 <img
-                  src={selectedMeme.image_url}
+                  src={'image_url' in selectedMeme ? selectedMeme.image_url : `data:image/png;base64,${selectedMeme.imageData}`}
                   alt={selectedMeme.title}
                   className="w-full h-auto rounded-lg shadow-lg"
                 />
@@ -299,15 +299,15 @@ export default function CommunityPage() {
               <div className="flex items-center gap-6 mb-6 text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                   <ChevronUp className="h-5 w-5 text-emerald-500" />
-                  <span className="font-medium">{selectedMeme.upvotes || 0} upvotes</span>
+                  <span className="font-medium">{('upvotes' in selectedMeme ? selectedMeme.upvotes : selectedMeme.likes) || 0} {('upvotes' in selectedMeme ? 'upvotes' : 'likes')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MessageCircle className="h-5 w-5 text-blue-500" />
-                  <span className="font-medium">0 comments</span>
+                  <span className="font-medium">{('comments' in selectedMeme ? selectedMeme.comments : 0) || 0} comments</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Share className="h-5 w-5 text-purple-500" />
-                  <span className="font-medium">0 shares</span>
+                  <span className="font-medium">{('shares' in selectedMeme ? selectedMeme.shares : 0) || 0} shares</span>
                 </div>
               </div>
 
