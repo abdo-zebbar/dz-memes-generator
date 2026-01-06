@@ -1,0 +1,32 @@
+.image-uploader {
+  margin-bottom: 20px;
+}
+
+.upload-button {
+  padding: 12px 24px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.meme-generator[data-theme="light"] .upload-button {
+  background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+}
+
+.meme-generator[data-theme="dark"] .upload-button {
+  background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+}
+
+.upload-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.4);
+}
+
+.upload-button:active {
+  transform: translateY(0);
+}

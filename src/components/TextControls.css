@@ -1,0 +1,235 @@
+.text-controls {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.meme-generator[data-theme="light"] .text-controls {
+  background: white;
+}
+
+.meme-generator[data-theme="dark"] .text-controls {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.text-controls h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.meme-generator[data-theme="light"] .text-controls h3 {
+  color: #333;
+}
+
+.meme-generator[data-theme="dark"] .text-controls h3 {
+  color: #ff8c42;
+}
+
+.add-text-button {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 20px;
+}
+
+.add-text-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.4);
+}
+
+.add-text-button:active {
+  transform: translateY(0);
+}
+
+.controls-placeholder {
+  padding: 20px;
+  text-align: center;
+  font-style: italic;
+  transition: color 0.3s ease;
+  line-height: 1.6;
+}
+
+.meme-generator[data-theme="light"] .controls-placeholder {
+  color: #999;
+}
+
+.meme-generator[data-theme="dark"] .controls-placeholder {
+  color: #888;
+}
+
+.control-group {
+  margin-bottom: 20px;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.meme-generator[data-theme="light"] .control-group label {
+  color: #555;
+}
+
+.meme-generator[data-theme="dark"] .control-group label {
+  color: #e0e0e0;
+}
+
+.text-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.meme-generator[data-theme="light"] .text-input {
+  background: white;
+  color: #333;
+}
+
+.meme-generator[data-theme="dark"] .text-input {
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #ff8c42;
+}
+
+.slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #e0e0e0;
+  outline: none;
+  -webkit-appearance: none;
+  transition: background 0.3s ease;
+}
+
+.meme-generator[data-theme="dark"] .slider {
+  background: #444;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff8c42;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff8c42;
+  cursor: pointer;
+  border: none;
+}
+
+.color-input-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.color-picker {
+  width: 60px;
+  height: 40px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.meme-generator[data-theme="dark"] .color-picker {
+  border-color: #444;
+}
+
+.color-text-input {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: monospace;
+  transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.meme-generator[data-theme="light"] .color-text-input {
+  background: white;
+  color: #333;
+}
+
+.meme-generator[data-theme="dark"] .color-text-input {
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+.color-text-input:focus {
+  outline: none;
+  border-color: #ff8c42;
+}
+
+.font-select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.meme-generator[data-theme="dark"] .font-select {
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+.font-select:focus {
+  outline: none;
+  border-color: #ff8c42;
+}
+
+.delete-button {
+  width: 100%;
+  padding: 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-button:hover {
+  background: #c82333;
+}

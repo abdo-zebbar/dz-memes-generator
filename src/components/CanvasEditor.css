@@ -1,0 +1,26 @@
+.canvas-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.meme-canvas {
+  background: transparent;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-hint {
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.meme-generator[data-theme="light"] .canvas-hint {
+  color: #666;
+}
+
+.meme-generator[data-theme="dark"] .canvas-hint {
+  color: #aaa;
+}

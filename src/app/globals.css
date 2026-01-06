@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .slider-thumb::-webkit-slider-thumb {
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .slider-thumb::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .slider-thumb::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .slider-thumb::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@layer base {
+  :root {
+    /* Clean Lightfunnels-style color palette - Pure White Background */
+    --background: 0 0% 100%; /* Pure White #ffffff */
+    --foreground: 222.2 84% 4.9%; /* Dark grey #1e293b for text */
+    --card: 0 0% 100%; /* Pure White */
+    --card-foreground: 222.2 84% 4.9%; /* Dark grey */
+    --popover: 0 0% 100%; /* Pure White */
+    --popover-foreground: 222.2 84% 4.9%; /* Dark grey */
+    --primary: 217.2 91.2% 59.8%; /* Royal Blue #2563EB */
+    --primary-foreground: 210 40% 98%; /* White text on blue */
+    --secondary: 210 40% 96%; /* Light grey */
+    --secondary-foreground: 222.2 84% 4.9%; /* Dark grey */
+    --muted: 210 40% 96%; /* Light grey */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Medium grey */
+    --accent: 210 40% 96%; /* Light grey */
+    --accent-foreground: 222.2 84% 4.9%; /* Dark grey */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%; /* Light border */
+    --input: 214.3 31.8% 91.4%; /* Light input */
+    --ring: 217.2 91.2% 59.8%; /* Royal Blue */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%; /* Dark Navy #0f172a */
+    --foreground: 210 40% 98%; /* Light text */
+    --card: 217.2 32.6% 17.5%; /* Dark card */
+    --card-foreground: 210 40% 98%; /* Light text */
+    --popover: 217.2 32.6% 17.5%; /* Dark popover */
+    --popover-foreground: 210 40% 98%; /* Light text */
+    --primary: 217.2 91.2% 59.8%; /* Royal Blue (same) */
+    --primary-foreground: 222.2 84% 4.9%; /* Dark text on blue */
+    --secondary: 217.2 32.6% 17.5%; /* Dark secondary */
+    --secondary-foreground: 210 40% 98%; /* Light text */
+    --muted: 217.2 32.6% 17.5%; /* Dark muted */
+    --muted-foreground: 215 20.2% 65.1%; /* Light grey */
+    --accent: 217.2 32.6% 17.5%; /* Dark accent */
+    --accent-foreground: 210 40% 98%; /* Light text */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%; /* Dark border */
+    --input: 217.2 32.6% 17.5%; /* Dark input */
+    --ring: 217.2 91.2% 59.8%; /* Royal Blue */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-accent rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-border;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-primary text-secondary;
+  }
+
+  /* Focus styles */
+  .focus-ring:focus {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 focus-ring hover:scale-105;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-secondary hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-foreground border border-border hover:bg-accent disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-ghost {
+    @apply text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  /* Input styles */
+  .input {
+    @apply flex h-10 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-foreground/60 focus-ring disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  /* Card styles */
+  .card {
+    @apply rounded-xl border border-border bg-card text-card-foreground shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply border-primary/20 transform scale-[1.02];
+  }
+
+  .card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+
+  .card-content {
+    @apply p-6 pt-0;
+  }
+}
+
+@layer utilities {
+  /* Text utilities */
+  .text-impact {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+
+  /* Animation utilities */
+  .animate-in {
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+}
+
+/* Impact font for meme text */
+@font-face {
+  font-family: 'Impact';
+  src: local('Impact');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
