@@ -12,10 +12,10 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'dz memes - Create & Share Amazing Memes',
+  title: 'ڨصرة - Guesra - Create & Share Amazing Memes',
   description: 'The ultimate meme creation platform with advanced editing tools and a vibrant community.',
   keywords: 'memes, meme generator, funny memes, meme creator, viral memes',
-  authors: [{ name: 'dz memes Team' }],
+  authors: [{ name: 'Guesra Team' }],
 }
 
 export const viewport = {

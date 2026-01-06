@@ -226,7 +226,7 @@ export const MemeGenerator: React.FC = () => {
     <div className="meme-generator" data-theme={theme} data-lang={language}>
       <header className="app-header">
         <div className="header-content">
-          <h1>dz memes</h1>
+          <h1>Dehka</h1>
           <div className="header-controls">
             <button
               onClick={() => setLanguage('ar')}

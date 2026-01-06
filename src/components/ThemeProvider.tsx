@@ -32,8 +32,8 @@ export function ThemeProvider({
   children,
   defaultTheme = 'light',
   defaultLanguage = 'en',
-  storageKey = 'meme-hub-theme',
-  languageKey = 'meme-hub-language',
+  storageKey = 'guesra-theme',
+  languageKey = 'guesra-language',
   ...props
 }: ThemeProviderProps & {
   defaultTheme?: Theme

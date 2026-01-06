@@ -1,4 +1,4 @@
-# dz memes - High-Performance Meme Platform
+# ڨصرة - Guesra - High-Performance Meme Platform
 
 A modern, full-stack meme creation and sharing platform built with Next.js, TypeScript, Tailwind CSS, and Supabase.
 

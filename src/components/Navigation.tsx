@@ -101,7 +101,7 @@ export function Navigation() {
           <div className={`flex ${isRTL ? 'flex-row-reverse' : ''}`}>
             <div className="flex flex-shrink-0 items-center px-2">
               <Link href="/" className="text-2xl font-bold text-primary">
-                dz memes
+                ڨصرة - Guesra
               </Link>
             </div>
               <div className={`hidden sm:flex ${isRTL ? 'sm:space-x-reverse sm:space-x-8' : 'sm:space-x-8'}`} style={{marginInlineStart: '32px'}}>
@@ -325,7 +325,7 @@ export function Navigation() {
             >
               <Card>
                 <CardHeader className="text-center">
-                  <CardTitle className="text-2xl">Sign In to dz memes</CardTitle>
+                  <CardTitle className="text-2xl">Sign In to ڨصرة - Guesra</CardTitle>
                   <CardDescription>
                     Enter your email and password to continue
                   </CardDescription>

@@ -56,7 +56,7 @@ export default function ContactPage() {
               Get in Touch
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Have questions about dz memes? Want to suggest new features? We'd love to hear from you!
+              Have questions about ڨصرة - Guesra? Want to suggest new features? We'd love to hear from you!
             </p>
 
             <div className="mt-8 space-y-6">

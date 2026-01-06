@@ -13,7 +13,7 @@ export const translations = {
     'home.subtitle': 'Join the ultimate meme creation platform. Design viral-worthy memes with our powerful editor, share with our vibrant community, and discover trending content from creators worldwide.',
     'home.startCreating': 'Start Creating',
     'home.exploreCommunity': 'Explore Community',
-    'home.whyChoose': 'Why Choose dz memes?',
+    'home.whyChoose': 'Why Choose ڨصرة - Guesra?',
     'home.description': 'Everything you need to create, share, and discover amazing memes',
     'home.advancedEditor': 'Advanced Editor',
     'home.editorDesc': 'Professional-grade meme creation tools with drag-and-drop text layers, custom fonts, and effects.',
@@ -24,7 +24,7 @@ export const translations = {
     'home.highQuality': 'High Quality',
     'home.qualityDesc': 'Export your memes in high-resolution formats perfect for social media sharing.',
     'home.readyToCreate': 'Ready to Create Your First Meme?',
-    'home.ctaDesc': 'Join thousands of creators who are already making amazing memes with dz memes. It\'s free, fast, and incredibly fun.',
+    'home.ctaDesc': 'Join thousands of creators who are already making amazing memes with ڨصرة - Guesra. It\'s free, fast, and incredibly fun.',
     'home.createNow': 'Start Creating Now',
     'home.signUpFree': 'Sign Up Free',
 
@@ -56,7 +56,7 @@ export const translations = {
     'community.by': 'by',
 
     // Auth
-    'auth.welcome': 'Welcome to dz memes',
+    'auth.welcome': 'Welcome to ڨصرة - Guesra',
     'auth.enterEmail': 'Enter your email to get started',
     'auth.email': 'Email address',
     'auth.sendOtp': 'Send OTP',
@@ -72,7 +72,7 @@ export const translations = {
 
     // Contact
     'contact.getInTouch': 'Get in Touch',
-    'contact.description': 'Have questions about dz memes? Want to suggest new features? We\'d love to hear from you!',
+    'contact.description': 'Have questions about ڨصرة - Guesra? Want to suggest new features? We\'d love to hear from you!',
     'contact.email': 'Email',
     'contact.support': 'Support',
     'contact.phone': 'Phone',
@@ -101,7 +101,7 @@ export const translations = {
     'home.subtitle': 'انضم إلى أفضل منصة لإنشاء الميمز. صمم ميمز تستحق الانتشار مع محررنا القوي، شارك مع مجتمعنا النابض، واكتشف المحتوى الرائج من المبدعين حول العالم.',
     'home.startCreating': 'ابدأ الإنشاء',
     'home.exploreCommunity': 'استكشف المجتمع',
-    'home.whyChoose': 'لماذا تختار dz memes؟',
+    'home.whyChoose': 'لماذا تختار ڨصرة - Guesra؟',
     'home.description': 'كل ما تحتاجه لإنشاء الميمز ومشاركتها واكتشافها',
     'home.advancedEditor': 'محرر متقدم',
     'home.editorDesc': 'أدوات إنشاء ميمز احترافية مع طبقات نص قابلة للسحب والإفلات، خطوط مخصصة، وتأثيرات.',
@@ -112,7 +112,7 @@ export const translations = {
     'home.highQuality': 'جودة عالية',
     'home.qualityDesc': 'صدر ميمزك بصيغ عالية الدقة مثالية لوسائل التواصل الاجتماعي.',
     'home.readyToCreate': 'جاهز لإنشاء ميمزك الأول؟',
-    'home.ctaDesc': 'انضم إلى آلاف المبدعين الذين ينشئون بالفعل ميمز رائعة مع dz memes. مجاني، سريع، وممتع جداً.',
+    'home.ctaDesc': 'انضم إلى آلاف المبدعين الذين ينشئون بالفعل ميمز رائعة مع ڨصرة - Guesra. مجاني، سريع، وممتع جداً.',
     'home.createNow': 'ابدأ الإنشاء الآن',
     'home.signUpFree': 'سجل مجاناً',
 
@@ -144,7 +144,7 @@ export const translations = {
     'community.by': 'بواسطة',
 
     // Auth
-    'auth.welcome': 'مرحباً بك في dz memes',
+    'auth.welcome': 'مرحباً بك في ڨصرة - Guesra',
     'auth.enterEmail': 'أدخل بريدك الإلكتروني للبدء',
     'auth.email': 'البريد الإلكتروني',
     'auth.sendOtp': 'إرسال رمز التحقق',
@@ -160,7 +160,7 @@ export const translations = {
 
     // Contact
     'contact.getInTouch': 'تواصل معنا',
-    'contact.description': 'لديك أسئلة حول dz memes؟ تريد اقتراح ميزات جديدة؟ نود سماع رأيك!',
+    'contact.description': 'لديك أسئلة حول ڨصرة - Guesra؟ تريد اقتراح ميزات جديدة؟ نود سماع رأيك!',
     'contact.email': 'البريد الإلكتروني',
     'contact.support': 'الدعم',
     'contact.phone': 'الهاتف',

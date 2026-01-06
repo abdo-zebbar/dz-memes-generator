@@ -78,7 +78,7 @@ export default function AuthPage() {
       >
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Welcome to dz memes</CardTitle>
+            <CardTitle className="text-2xl">Welcome to ڨصرة - Guesra</CardTitle>
             <CardDescription>
               Sign in to your account or create a new one
             </CardDescription>

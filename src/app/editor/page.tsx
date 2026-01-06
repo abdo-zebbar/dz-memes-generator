@@ -681,7 +681,7 @@ export default function EditorPage() {
         return
       }
 
-      // Get user profile to retrieve username
+      // Get user profile to retrieve username (optional - continue with default if fails)
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('username')
@@ -690,9 +690,7 @@ export default function EditorPage() {
 
       if (profileError) {
         console.error('Profile fetch error:', profileError)
-        showToast('Failed to get user profile', 'error')
-        setIsSharing(false)
-        return
+        // Continue with default username instead of failing
       }
 
       // Capture final canvas as Base64
@@ -735,7 +733,7 @@ export default function EditorPage() {
           title: layers.length > 0 ? layers[0].content : 'Untitled Meme',
           image_url: publicUrl,
           user_id: user.id,
-          username: profile?.username || user.email?.split('@')[0] || 'Anonymous',
+          username: profile?.username || user.email?.split('@')[0] || 'Guesra User',
           upvotes: 0,
           downvotes: 0
         }
@@ -749,7 +747,7 @@ export default function EditorPage() {
           console.error('Insert data:', insertData)
           showToast('Failed to save meme to database', 'error')
         } else {
-          showToast('Successfully shared to dz memes community!', 'success')
+          showToast('تم نشر الميمز في ڨصرة بنجاح! 🎉', 'success')
           // Reset canvas after successful share
           setImageSrc('')
           setLayers([])
