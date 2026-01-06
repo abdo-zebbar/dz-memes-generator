@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { Upload, Download, Share2, Palette, Type, Plus, Trash2, Copy, Delete } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 import { useToast } from '@/components/ui/Toast'
@@ -676,7 +677,21 @@ export default function EditorPage() {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
-        showToast('Please sign in to share memes to the community', 'error')
+        showToast('يجب تسجيل الدخول أولاً', 'error')
+        return
+      }
+
+      // Get user profile to retrieve username
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single()
+
+      if (profileError) {
+        console.error('Profile fetch error:', profileError)
+        showToast('Failed to get user profile', 'error')
+        setIsSharing(false)
         return
       }
 
@@ -715,19 +730,23 @@ export default function EditorPage() {
           .from('memes')
           .getPublicUrl(fileName)
 
-        // Insert into memes table
+        // Insert into memes table with all required columns
+        const insertData = {
+          title: layers.length > 0 ? layers[0].content : 'Untitled Meme',
+          image_url: publicUrl,
+          user_id: user.id,
+          username: profile?.username || user.email?.split('@')[0] || 'Anonymous',
+          upvotes: 0,
+          downvotes: 0
+        }
+
         const { error: insertError } = await supabase
           .from('memes')
-          .insert({
-            title: layers.length > 0 ? layers[0].content : 'Untitled Meme',
-            image_url: publicUrl,
-            user_id: user.id,
-            upvotes: 0,
-            downvotes: 0
-          })
+          .insert(insertData)
 
         if (insertError) {
-          console.error('Insert error:', insertError)
+          console.error('Database insert error:', insertError)
+          console.error('Insert data:', insertData)
           showToast('Failed to save meme to database', 'error')
         } else {
           showToast('Successfully shared to dz memes community!', 'success')
@@ -735,6 +754,8 @@ export default function EditorPage() {
           setImageSrc('')
           setLayers([])
           setActiveLayerId(null)
+          // Redirect to community page to see the shared meme
+          window.location.href = '/community'
         }
 
         setIsSharing(false)

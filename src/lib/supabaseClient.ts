@@ -23,6 +23,7 @@ export type Database = {
           created_at: string
           updated_at: string
           user_id: string
+          username: string
           upvotes: number
           downvotes: number
         }
@@ -33,6 +34,7 @@ export type Database = {
           created_at?: string
           updated_at?: string
           user_id: string
+          username: string
           upvotes?: number
           downvotes?: number
         }
@@ -43,6 +45,7 @@ export type Database = {
           created_at?: string
           updated_at?: string
           user_id?: string
+          username?: string
           upvotes?: number
           downvotes?: number
         }
