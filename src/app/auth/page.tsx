@@ -32,8 +32,8 @@ export default function AuthPage() {
         throw error
       }
 
-      // Redirect immediately to editor after successful signup
-      router.push('/editor')
+      // Redirect to home page after successful signup - user can navigate to editor when ready
+      router.push('/')
 
     } catch (err: any) {
       setError(err.message || 'An error occurred during sign up')
@@ -57,8 +57,8 @@ export default function AuthPage() {
         throw error
       }
 
-      // Redirect immediately to editor after successful login
-      router.push('/editor')
+      // Redirect to home page after successful login - user can navigate to editor when ready
+      router.push('/')
 
     } catch (err: any) {
       setError(err.message || 'An error occurred during sign in')
