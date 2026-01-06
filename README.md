@@ -6,7 +6,7 @@ A modern, full-stack meme creation and sharing platform built with Next.js, Type
 
 - **Advanced Meme Editor**: Interactive Fabric.js-powered editor with drag-and-drop text layers
 - **Community Feed**: Discover and upvote trending memes with real-time voting
-- **Authentication**: Secure 6-digit OTP email authentication
+- **Authentication**: Secure email/password authentication
 - **Responsive Design**: Mobile-first design with dark theme
 - **High-Quality Export**: Export memes as high-resolution PNG files
 
@@ -155,8 +155,7 @@ src/
 - User profiles and creator attribution
 
 ### Authentication
-- Email-based authentication
-- 6-digit OTP verification
+- Email/password authentication
 - Secure session management
 - Profile creation and management
 
